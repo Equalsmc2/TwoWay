@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Fira+Code&family=Orbitron:wght@700&family=Space+Mono&display=swap');
 
-/* --- The Dark Tabletop --- */
 body { 
     background: radial-gradient(circle at center, #1a1a24 0%, #000 100%);
     display: flex; 
@@ -20,7 +19,7 @@ body {
     padding: 60px 40px;
     background: linear-gradient(135deg, #050514 0%, #140d00 100%);
     border: 4px solid #111;
-    outline: 2px solid #333; /* Leather binding edge */
+    outline: 2px solid #333; 
     box-shadow: 0 20px 50px rgba(0,0,0,1), inset 0 0 30px rgba(0,0,0,0.8);
     border-radius: 5px 25px 25px 5px;
     text-align: center;
@@ -40,7 +39,7 @@ body {
     position: relative;
     width: 95vw;
     max-width: 1400px;
-    min-width: 900px; /* Forces book to stay wide */
+    min-width: 900px; 
     height: 85vh;
     min-height: 500px;
     display: flex;
@@ -49,14 +48,11 @@ body {
     box-shadow: 0 30px 60px rgba(0,0,0,0.9), inset 0 0 20px rgba(0,0,0,0.8);
     border: 3px solid #111;
     overflow: hidden;
-    
-    /* Left Page (Azure) | Right Page (Amber) */
     background:
         linear-gradient(to right, #02020a 0%, #0a0a1a 100%) left / 50% 100% no-repeat,
         linear-gradient(to right, #1a1200 0%, #050300 100%) right / 50% 100% no-repeat;
 }
 
-/* The Deep Center Crease */
 .book-spine {
     position: absolute;
     top: 0; left: 50%;
@@ -68,7 +64,6 @@ body {
     z-index: 5;
 }
 
-/* --- Headers (Top of the Pages) --- */
 .book-header { 
     display: flex; 
     width: 100%;
@@ -78,22 +73,24 @@ body {
 }
 
 .header-page {
-    flex: 1; /* Each takes exactly 50% */
+    flex: 1; 
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 40px;
 }
 
-/* Azure Header Styling */
+/* Azure Header (Angular/Sharp) */
+.azure-header { border-radius: 0; }
 .azure-header .team-label { color: #00ffff; font-family: 'Orbitron', sans-serif; font-size: 0.9em; opacity: 0.7;}
 .azure-header .char-name { color: #00ffff; font-family: 'Fira Code', monospace; font-size: 1.3em; font-weight: bold; text-shadow: 0 0 10px rgba(0, 136, 255, 0.6); text-transform: uppercase;}
 
-/* Amber Header Styling */
+/* Amber Header (Round) */
+.amber-header { border-radius: 0 20px 0 0; }
 .amber-header .team-label { color: #ffbf00; font-family: 'Cinzel', serif; font-size: 0.9em; opacity: 0.7;}
 .amber-header .char-name { color: #ffbf00; font-family: 'Space Mono', monospace; font-size: 1.3em; font-weight: bold; text-shadow: 0 0 10px rgba(255, 191, 0, 0.6); text-transform: uppercase;}
 
-/* --- The Pages (Chat Window) --- */
+/* --- The Pages --- */
 .pages-container { 
     flex: 1; 
     overflow-y: auto; 
@@ -106,36 +103,38 @@ body {
 .pages-container::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
 .pages-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px;}
 
-/* Base Message Box */
 .message { 
     margin-bottom: 25px; 
     padding: 15px 25px; 
-    width: 42%; /* Prevents text from crossing the spine */
+    width: 42%; 
     word-wrap: break-word;
     line-height: 1.6;
 }
 
-/* THE LEFT PAGE (Team Azure - Incoming) */
+/* THE LEFT PAGE (Team Azure) - ANGULAR */
 .message.them { 
     align-self: flex-start; 
     background: rgba(0, 136, 255, 0.08); 
-    border-left: 3px solid #00ffff; 
+    border-left: 4px solid #00ffff; 
     color: #e0f7ff; 
     font-family: 'Fira Code', monospace; 
     font-size: 1rem;
-    border-radius: 0 15px 15px 0;
+    border-radius: 0px; /* Completely sharp edges */
     box-shadow: inset 0 0 20px rgba(0, 136, 255, 0.1);
+    /* Adds an angular cut to the right side of the bubble */
+    clip-path: polygon(0 0, 100% 0, calc(100% - 15px) 100%, 0 100%);
+    padding-right: 35px; /* Keeps text away from the cut */
 }
 
-/* THE RIGHT PAGE (Team Amber - Outgoing) */
+/* THE RIGHT PAGE (Team Amber) - ROUND */
 .message.me { 
     align-self: flex-end; 
     background: rgba(255, 191, 0, 0.05); 
-    border-right: 3px solid #ffbf00; 
+    border-right: 4px solid #ffbf00; 
     color: #fdf5e6; 
     font-family: 'Space Mono', monospace; 
     font-size: 1rem;
-    border-radius: 15px 0 0 15px;
+    border-radius: 30px; /* Extremely round pill shape */
     text-align: right;
     box-shadow: inset 0 0 20px rgba(255, 191, 0, 0.1);
 }
@@ -143,34 +142,54 @@ body {
 /* --- Bottom Input Area --- */
 .input-area { 
     display: flex; 
+    flex-direction: column; /* Stacks the button under the input */
     padding: 25px 40px; 
-    gap: 20px; 
+    gap: 15px; 
     z-index: 10;
     background: rgba(0,0,0,0.6);
     border-top: 1px solid rgba(255,255,255,0.05);
 }
+
+/* The Input Box bridges the dimensions: Sharp on Left (Azure), Round on Right (Amber) */
 .input-area input { 
-    flex: 1; 
+    width: 100%; 
     padding: 15px 20px; 
     background: rgba(0, 0, 0, 0.8); 
     border: 1px solid #444; 
-    border-radius: 8px; 
+    border-left: 2px solid #00ffff; 
+    border-right: 2px solid #ffbf00; 
+    border-radius: 0 25px 25px 0; /* Bridging Shape */
     color: #fff; 
     font-family: 'Space Mono', monospace; 
     font-size: 1rem;
     outline: none;
     transition: 0.3s;
+    box-sizing: border-box;
 }
-.input-area input:focus { border-color: #ffbf00; box-shadow: inset 0 0 15px rgba(255, 191, 0, 0.2); }
+.input-area input:focus { 
+    border-color: #ffbf00; 
+    box-shadow: inset 0 0 15px rgba(255, 191, 0, 0.2); 
+}
+
+/* The Button bridges the dimensions: Sharp on Left (Azure), Round on Right (Amber) */
 .input-area button { 
-    padding: 0 40px; 
+    width: 100%; /* Now spans across the entire bottom */
+    padding: 15px; 
     background: transparent; 
     color: #fff; 
     border: 1px solid #777; 
-    border-radius: 8px; 
+    border-left: 2px solid #00ffff; 
+    border-right: 2px solid #ffbf00; 
+    border-radius: 0 30px 30px 0; /* Bridging Shape */
     cursor: pointer; 
     font-family: 'Orbitron', sans-serif; 
     font-size: 1.1em;
+    letter-spacing: 2px;
     transition: 0.3s;
 }
-.input-area button:hover { border-color: #ffbf00; color: #ffbf00; text-shadow: 0 0 10px #ffbf00; }
+.input-area button:hover { 
+    border-color: #ffbf00; 
+    color: #ffbf00; 
+    text-shadow: 0 0 10px #ffbf00; 
+    background: rgba(255, 191, 0, 0.05);
+}
