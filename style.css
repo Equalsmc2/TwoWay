@@ -1,110 +1,148 @@
+/* Base setup to center the "phone" on the screen */
 body { 
-    font-family: 'Georgia', serif; 
-    background: #2c2825; 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+    background: #1e1e1e; /* Dark background to make the phone pop */
     display: flex; 
     justify-content: center; 
-    padding: 20px; 
-    color: #333; 
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    color: #000; 
 }
 
+/* The Phone Container */
 .container { 
-    background: #f4ecd8; 
-    padding: 20px; 
-    border-radius: 8px; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
+    background: #ffffff; 
+    border-radius: 40px; /* Phone-like curves */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
     width: 100%; 
-    max-width: 450px; 
-    border: 1px solid #cbbca0; 
+    max-width: 375px; /* Typical smartphone width */
+    height: 80vh;
+    max-height: 800px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; 
+    border: 8px solid #333; /* Phone bezel */
 }
 
 h2, p { 
     text-align: center; 
-    margin-top: 0; 
 }
 
+/* Auth screen specific styling */
+#auth-container {
+    justify-content: center;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+#auth-container input {
+    margin: 20px 0 15px 0;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#auth-container button {
+    padding: 12px;
+    background: #007AFF;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    cursor: pointer;
+}
+
+/* Top bar showing who you are texting */
+.chat-header { 
+    font-weight: 600; 
+    padding: 15px; 
+    text-align: center; 
+    font-size: 1em; 
+    background: #f8f8f8;
+    border-bottom: 1px solid #ddd;
+    z-index: 10;
+}
+
+/* The actual chat window */
 #messages { 
-    height: 350px; 
-    border: 1px solid #d4c4a8; 
-    margin-bottom: 15px; 
+    flex: 1; /* Takes up remaining vertical space */
     overflow-y: auto; 
     padding: 15px; 
     display: flex; 
     flex-direction: column; 
-    background: #faf4e8; 
-    border-radius: 4px;
+    background: #ffffff; 
 }
 
 /* Base message styling */
 .message { 
-    margin-bottom: 12px; 
-    padding: 10px 14px; 
-    max-width: 75%; 
+    margin-bottom: 10px; 
+    padding: 10px 15px; 
+    max-width: 70%; 
     line-height: 1.4; 
     word-wrap: break-word;
+    font-size: 15px;
 }
 
-/* YOUR messages (Right side) */
+/* YOUR messages (Right side - Blue iMessage style) */
 .message.me { 
-    align-self: flex-end; /* Pushes to the right */
-    background: #d4c4a8; 
-    text-align: right;
-    /* Creates a bubble tail pointing right */
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 0px; 
-}
-
-/* RECEIVER'S messages (Left side) */
-.message.them { 
-    align-self: flex-start; /* Pushes to the left */
-    background: #fffdf7; 
-    border: 1px solid #e3d5b8;
-    font-style: italic;
+    align-self: flex-end; 
+    background: #007AFF; 
+    color: white;
     text-align: left;
-    /* Creates a bubble tail pointing left */
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
-    border-bottom-left-radius: 0px;
+    border-radius: 20px;
+    border-bottom-right-radius: 2px; /* Creates the little tail */
 }
 
+/* RECEIVER'S messages (Left side - Gray SMS style) */
+.message.them { 
+    align-self: flex-start; 
+    background: #E5E5EA; 
+    color: black;
+    text-align: left;
+    border-radius: 20px;
+    border-bottom-left-radius: 2px; /* Creates the little tail */
+    font-style: normal; 
+}
+
+/* The bottom typing area */
 .input-area { 
     display: flex; 
-    gap: 5px; 
+    gap: 10px; 
+    padding: 10px 15px;
+    background: #f8f8f8;
+    border-top: 1px solid #ddd;
 }
 
-input { 
+/* The text box */
+.input-area input { 
     flex: 1; 
-    padding: 10px; 
-    border: 1px solid #d4c4a8; 
-    border-radius: 4px; 
-    font-family: 'Georgia', serif; 
-    background: #fffdf7; 
+    padding: 10px 15px; 
+    border: 1px solid #ccc; 
+    border-radius: 20px; /* Pill shape */
+    font-family: inherit; 
+    font-size: 15px;
+    outline: none;
 }
 
-button { 
-    padding: 10px 20px; 
-    background: #5a4b3c; 
-    color: #f4ecd8; 
+/* The send button */
+.input-area button { 
+    padding: 10px 10px; 
+    background: transparent; 
+    color: #007AFF; 
     border: none; 
-    border-radius: 4px; 
     cursor: pointer; 
-    font-family: 'Georgia', serif; 
+    font-family: inherit; 
     font-weight: bold; 
+    font-size: 16px;
     transition: 0.2s; 
 }
 
-button:hover { 
-    background: #3e3328; 
-}
-
-.chat-header { 
-    font-weight: bold; 
-    margin-bottom: 15px; 
-    border-bottom: 2px solid #d4c4a8; 
-    padding-bottom: 10px; 
-    text-align: center; 
-    font-variant: small-caps; 
-    font-size: 1.2em; 
+.input-area button:hover { 
+    color: #0056b3; 
 }
