@@ -1,148 +1,175 @@
-/* Base setup to center the "phone" on the screen */
+/* --- Import Team Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Fira+Code&family=Orbitron:wght@700&family=Space+Mono&display=swap');
+
+/* --- The Dark Tabletop (Background) --- */
 body { 
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-    background: #1e1e1e; /* Dark background to make the phone pop */
+    background: radial-gradient(circle at center, #1a1a24 0%, #000 100%);
     display: flex; 
     justify-content: center; 
     align-items: center;
     height: 100vh;
     margin: 0;
-    color: #000; 
+    color: #fff;
+    overflow: hidden;
 }
 
-/* The Phone Container */
+/* --- The Open Book (Main Container) --- */
 .container { 
-    background: #ffffff; 
-    border-radius: 40px; /* Phone-like curves */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-    width: 100%; 
-    max-width: 375px; /* Typical smartphone width */
-    height: 80vh;
-    max-height: 800px;
+    position: relative;
+    width: 90vw;
+    max-width: 1200px;
+    height: 85vh;
     display: flex;
     flex-direction: column;
-    overflow: hidden; 
-    border: 8px solid #333; /* Phone bezel */
+    border-radius: 8px 25px 25px 8px; /* Curved outer pages, flat spine */
+    box-shadow: 0 40px 60px rgba(0,0,0,0.9), inset 0 0 20px rgba(0,0,0,0.8);
+    border: 4px solid #111;
+    outline: 1px solid #333; /* Leather binding edge */
+    
+    /* SPLIT BACKGROUND: Azure Left (50%) | Amber Right (50%) */
+    background:
+        /* Azure Matrix Grid (Left) */
+        linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+        /* Core Split */
+        linear-gradient(to right, #010105 0%, #050514 50%, #140d00 50%, #030200 100%);
+    background-size: 50px 50px, 50px 50px, 100% 100%;
 }
 
-h2, p { 
-    text-align: center; 
+/* --- The Book Spine (Center Crease) --- */
+.container::after {
+    content: "";
+    position: absolute;
+    top: 0; 
+    left: 50%;
+    width: 6px; 
+    height: 100%;
+    background: #000;
+    box-shadow: 0 0 30px 15px rgba(0,0,0,0.9);
+    transform: translateX(-50%);
+    pointer-events: none; /* Allows clicking through the shadow */
+    z-index: 5;
 }
 
-/* Auth screen specific styling */
+/* --- Login Screen (Closed Book Vibe) --- */
 #auth-container {
-    justify-content: center;
-    padding: 30px;
-    box-sizing: border-box;
+    width: 400px;
+    height: auto;
+    padding: 50px;
+    margin: auto;
+    background: linear-gradient(135deg, rgba(1,1,5,0.9) 0%, rgba(20,13,0,0.9) 100%);
+    border: 2px solid #333;
+    box-shadow: 0 0 40px rgba(0,0,0,1);
+    z-index: 20;
 }
+#auth-container h2 { font-family: 'Orbitron', sans-serif; color: #00ffff; text-shadow: 0 0 10px rgba(0, 136, 255, 0.6); margin-bottom: 5px; }
+#auth-container p { font-family: 'Cinzel', serif; color: #ffbf00; margin-bottom: 30px; }
+#auth-container input { width: 100%; padding: 12px; margin-bottom: 20px; background: rgba(0,0,0,0.6); border: 1px solid #555; color: #fff; font-family: 'Space Mono', monospace; text-align: center; }
+#auth-container button { width: 100%; padding: 12px; background: transparent; border: 1px solid #777; color: #fff; cursor: pointer; font-family: 'Orbitron', sans-serif; transition: 0.3s; }
+#auth-container button:hover { border-color: #ffbf00; box-shadow: 0 0 15px rgba(255, 191, 0, 0.3); }
 
-#auth-container input {
-    margin: 20px 0 15px 0;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-#auth-container button {
-    padding: 12px;
-    background: #007AFF;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    width: 100%;
-    cursor: pointer;
-}
-
-/* Top bar showing who you are texting */
+/* --- Header Area --- */
 .chat-header { 
-    font-weight: 600; 
-    padding: 15px; 
-    text-align: center; 
-    font-size: 1em; 
-    background: #f8f8f8;
-    border-bottom: 1px solid #ddd;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    padding: 20px 50px; 
+    font-size: 1.3em; 
     z-index: 10;
+    border-bottom: 2px solid rgba(255,255,255,0.05);
 }
+#display-name { flex: 1; text-align: left; color: #00ffff; font-family: 'Orbitron', sans-serif; text-shadow: 0 0 10px rgba(0, 136, 255, 0.6); letter-spacing: 2px; text-transform: uppercase; }
+.chat-header span:nth-child(2) { color: #444; font-size: 0.8em; }
+#partner-name { flex: 1; text-align: right; color: #ffbf00; font-family: 'Cinzel', serif; text-shadow: 0 0 10px rgba(255, 191, 0, 0.6); letter-spacing: 2px; text-transform: uppercase; }
 
-/* The actual chat window */
+/* --- The Pages (Chat Window) --- */
 #messages { 
-    flex: 1; /* Takes up remaining vertical space */
+    flex: 1; 
     overflow-y: auto; 
-    padding: 15px; 
+    padding: 40px; 
     display: flex; 
     flex-direction: column; 
-    background: #ffffff; 
+    z-index: 10;
 }
+#messages::-webkit-scrollbar { width: 6px; }
+#messages::-webkit-scrollbar-track { background: transparent; }
+#messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
 
-/* Base message styling */
 .message { 
-    margin-bottom: 10px; 
-    padding: 10px 15px; 
-    max-width: 70%; 
-    line-height: 1.4; 
+    margin-bottom: 25px; 
+    padding: 15px 20px; 
+    max-width: 42%; /* Restricts messages to stay STRICTLY on their side of the book */
     word-wrap: break-word;
-    font-size: 15px;
+    line-height: 1.6;
+    position: relative;
 }
 
-/* YOUR messages (Right side - Blue iMessage style) */
-.message.me { 
-    align-self: flex-end; 
-    background: #007AFF; 
-    color: white;
-    text-align: left;
-    border-radius: 20px;
-    border-bottom-right-radius: 2px; /* Creates the little tail */
-}
-
-/* RECEIVER'S messages (Left side - Gray SMS style) */
+/* --- THE LEFT PAGE (Team Azure / Incoming Messages) --- */
 .message.them { 
     align-self: flex-start; 
-    background: #E5E5EA; 
-    color: black;
-    text-align: left;
-    border-radius: 20px;
-    border-bottom-left-radius: 2px; /* Creates the little tail */
-    font-style: normal; 
+    background: rgba(0, 136, 255, 0.1); 
+    border-left: 3px solid #00ffff; 
+    color: #e0f7ff; 
+    font-family: 'Fira Code', monospace; 
+    font-size: 0.95rem;
+    box-shadow: inset 0 0 20px rgba(0, 136, 255, 0.1);
+    border-radius: 0 15px 15px 0;
 }
 
-/* The bottom typing area */
+/* --- THE RIGHT PAGE (Team Amber / Outgoing Messages) --- */
+.message.me { 
+    align-self: flex-end; 
+    background: rgba(255, 191, 0, 0.05); 
+    border-right: 3px solid #ffbf00; 
+    color: #fdf5e6; 
+    font-family: 'Space Mono', monospace; 
+    font-size: 0.95rem;
+    box-shadow: inset 0 0 20px rgba(255, 191, 0, 0.1);
+    border-radius: 15px 0 0 15px;
+    text-align: right;
+}
+
+/* --- Bottom Input Area --- */
 .input-area { 
     display: flex; 
-    gap: 10px; 
-    padding: 10px 15px;
-    background: #f8f8f8;
-    border-top: 1px solid #ddd;
+    padding: 25px 50px; 
+    gap: 20px; 
+    z-index: 10;
+    background: rgba(0,0,0,0.5);
+    border-top: 1px solid rgba(255,255,255,0.05);
 }
 
-/* The text box */
 .input-area input { 
     flex: 1; 
-    padding: 10px 15px; 
-    border: 1px solid #ccc; 
-    border-radius: 20px; /* Pill shape */
-    font-family: inherit; 
-    font-size: 15px;
+    padding: 15px 20px; 
+    background: rgba(0, 0, 0, 0.8); 
+    border: 1px solid #444; 
+    border-radius: 8px; 
+    color: #fff; 
+    font-family: 'Space Mono', monospace; 
+    font-size: 1rem;
     outline: none;
+    transition: all 0.3s ease;
+}
+.input-area input:focus { 
+    border-color: #ffbf00; 
+    box-shadow: inset 0 0 15px rgba(255, 191, 0, 0.2); 
 }
 
-/* The send button */
 .input-area button { 
-    padding: 10px 10px; 
+    padding: 0 35px; 
     background: transparent; 
-    color: #007AFF; 
-    border: none; 
+    color: #fff; 
+    border: 1px solid #666; 
+    border-radius: 8px; 
     cursor: pointer; 
-    font-family: inherit; 
+    font-family: 'Orbitron', sans-serif; 
     font-weight: bold; 
-    font-size: 16px;
-    transition: 0.2s; 
+    letter-spacing: 1px;
+    transition: all 0.3s ease; 
 }
-
 .input-area button:hover { 
-    color: #0056b3; 
+    background: rgba(0, 255, 255, 0.1); 
+    border-color: #00ffff;
+    text-shadow: 0 0 10px #00ffff;
 }
