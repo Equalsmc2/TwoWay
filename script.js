@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// Your exact Firebase configuration
+// --- FIREBASE CONFIGURATION ---
 const firebaseConfig = {
   apiKey: "AIzaSyCVhuOYpQ_3U5GO16P7XWHuR_SuTyUAYwc",
   authDomain: "twoway-34b26.firebaseapp.com",
@@ -13,12 +13,15 @@ const firebaseConfig = {
   measurementId: "G-7FVXKLCGKC"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// DM CONFIGURATION: Define the pairs here (Group 1 <-> Group 2)
-// Use all lowercase letters for the keys
+// --- FACTION & LORE CONFIGURATION ---
+// Define which characters belong to which reality (use all lowercase)
+const teamAzure = ["thorin", "grog", "caleb"]; 
+const teamAmber = ["elara", "jaskier", "lyra"];
+
+// Define the 1-on-1 connections across the rift
 const characterPairs = {
     "elara": "thorin",
     "thorin": "elara",
@@ -28,7 +31,7 @@ const characterPairs = {
     "caleb": "lyra"
 };
 
-// Logic Elements
+// --- UI ELEMENTS ---
 const loginBtn = document.getElementById('login-btn');
 const sendBtn = document.getElementById('send-btn');
 const userIdInput = document.getElementById('user-id');
@@ -39,37 +42,44 @@ let currentUserId = "";
 let partnerId = "";
 let roomId = "";
 
+// --- LOGIN LOGIC ---
 loginBtn.onclick = () => {
-    // Convert input to lowercase to check the dictionary safely
     const inputName = userIdInput.value.trim().toLowerCase();
 
-    if (!inputName) return alert("Please enter a name.");
-    
-    // Check if the name exists in your DM dictionary
-    if (!characterPairs[inputName]) {
-        return alert("Terminal error: Name not found in the manifest.");
-    }
+    if (!inputName) return alert("System Error: Identity required to puncture reality.");
+    if (!characterPairs[inputName]) return alert("System Error: Character signature not found in the manifest.");
 
-    // Assign names based on the dictionary
-    currentUserId = userIdInput.value.trim(); // Keeps their original capitalization for display
+    // Assign identities
+    currentUserId = inputName; 
     partnerId = characterPairs[inputName];
     
-    // Create a unique Room ID by sorting the two names alphabetically
-    roomId = [inputName, partnerId.toLowerCase()].sort().join("_");
+    // Create unique Room ID by sorting alphabetically so both players share the same database path
+    roomId = [currentUserId, partnerId].sort().join("_");
 
-    // UI Toggle
+    // UI Toggle: Hide login, show the rift
     document.getElementById('auth-container').style.display = 'none';
-    document.getElementById('chat-container').style.display = 'block';
-    
-    // Capitalize the first letter of the partner's name for display
-    const displayPartnerName = partnerId.charAt(0).toUpperCase() + partnerId.slice(1);
-    
-    document.getElementById('display-name').innerText = currentUserId;
-    document.getElementById('partner-name').innerText = displayPartnerName;
+    document.getElementById('chat-container').style.display = 'flex';
+
+    // Format names for the display headers (Capitalizes the first letter)
+    const displayUser = currentUserId.charAt(0).toUpperCase() + currentUserId.slice(1);
+    const displayPartner = partnerId.charAt(0).toUpperCase() + partnerId.slice(1);
+
+    // Lock the names to the correct dimension in the headers!
+    const azureNameDisplay = document.querySelector('.azure-header .char-name');
+    const amberNameDisplay = document.querySelector('.amber-header .char-name');
+
+    if (teamAzure.includes(currentUserId)) {
+        azureNameDisplay.innerText = displayUser;
+        amberNameDisplay.innerText = displayPartner;
+    } else {
+        azureNameDisplay.innerText = displayPartner;
+        amberNameDisplay.innerText = displayUser;
+    }
 
     loadMessages();
 };
 
+// --- MESSAGE RENDERING LOGIC ---
 function loadMessages() {
     const chatRef = ref(db, `chats/${roomId}`);
     onChildAdded(chatRef, (snapshot) => {
@@ -82,21 +92,28 @@ function displayMessage(sender, text) {
     const div = document.createElement('div');
     div.classList.add('message');
     
-    // Check if the sender matches the current user
-    if (sender.toLowerCase() === currentUserId.toLowerCase()) {
-        div.classList.add('me');
+    const lowerSender = sender.toLowerCase();
+
+    // Route the message styles based entirely on FACTION
+    if (teamAzure.includes(lowerSender)) {
+        div.classList.add('azure-msg');
+    } else if (teamAmber.includes(lowerSender)) {
+        div.classList.add('amber-msg');
     } else {
-        div.classList.add('them');
+        div.classList.add('amber-msg'); // Fallback failsafe
     }
     
     div.innerText = text;
     messagesDiv.appendChild(div);
+    
+    // Auto-scroll to bottom as new messages manifest
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
+// --- SENDING LOGIC ---
 sendBtn.onclick = () => {
-    const text = messageInput.value;
-    if (!text) return;
+    const text = messageInput.value.trim();
+    if (!text) return; // Prevent sending empty voids
 
     push(ref(db, `chats/${roomId}`), {
         sender: currentUserId,
@@ -104,10 +121,10 @@ sendBtn.onclick = () => {
         timestamp: serverTimestamp()
     });
 
-    messageInput.value = "";
+    messageInput.value = ""; // Clear input after projecting
 };
 
-// Allow pressing "Enter" to send a message
+// Allow pressing "Enter" to transmit
 messageInput.addEventListener("keypress", function(event) {
   if (event.key === "Enter") {
     event.preventDefault();
