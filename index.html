@@ -3,28 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library of Babel - Communication Terminal</title>
+    <title>Library of Babel - Dimensional Tome</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="auth-container" class="container">
-        <h2>Enter Character Name</h2>
-        <p>Access the Hexagon Terminal</p>
-        <input type="text" id="user-id" placeholder="e.g. Elara">
-        <button id="login-btn">Connect</button>
+    <div id="auth-container" class="tome-cover">
+        <h2>Hexagon Terminal</h2>
+        <p>Library of Babel Manifest</p>
+        <div class="login-inputs">
+            <input type="text" id="user-id" placeholder="Inscribe Character Name...">
+            <button id="login-btn">Open Tome</button>
+        </div>
     </div>
 
-    <div id="chat-container" class="container" style="display: none;">
-        <div class="chat-header">
-            <span id="display-name"></span> 
-            <span> &harr; </span> 
-            <span id="partner-name"></span>
+    <div id="chat-container" class="book-spread" style="display: none;">
+        
+        <div class="book-spine"></div>
+
+        <div class="book-header">
+            <div class="header-page azure-header">
+                <span class="team-label">Team Azure (ATR)</span>
+                <span id="partner-name" class="char-name"></span>
+            </div>
+            <div class="header-page amber-header">
+                <span id="display-name" class="char-name"></span>
+                <span class="team-label">Team Amber (O.U.T.I.S)</span>
+            </div>
         </div>
-        <div id="messages"></div>
+
+        <div id="messages" class="pages-container"></div>
+
         <div class="input-area">
-            <input type="text" id="message-input" placeholder="Transcribe message...">
-            <button id="send-btn">Send</button>
+            <input type="text" id="message-input" placeholder="Transcribe your thoughts into the weave...">
+            <button id="send-btn">Project</button>
         </div>
     </div>
 
