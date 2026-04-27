@@ -1,23 +1,24 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded, serverTimestamp } 
-    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// TODO: Replace with YOUR Firebase config
+// Your exact Firebase configuration
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    databaseURL: "https://YOUR_PROJECT.firebaseio.com",
-    projectId: "YOUR_PROJECT",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_ID",
-    appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCVhuOYpQ_3U5GO16P7XWHuR_SuTyUAYwc",
+  authDomain: "twoway-34b26.firebaseapp.com",
+  databaseURL: "https://twoway-34b26-default-rtdb.firebaseio.com",
+  projectId: "twoway-34b26",
+  storageBucket: "twoway-34b26.firebasestorage.app",
+  messagingSenderId: "324614179982",
+  appId: "1:324614179982:web:1400f9a68376b11ef50ddf",
+  measurementId: "G-7FVXKLCGKC"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 // DM CONFIGURATION: Define the pairs here (Group 1 <-> Group 2)
-// Use all lowercase letters for the keys to make logging in easier for players
+// Use all lowercase letters for the keys
 const characterPairs = {
     "elara": "thorin",
     "thorin": "elara",
@@ -80,12 +81,14 @@ function loadMessages() {
 function displayMessage(sender, text) {
     const div = document.createElement('div');
     div.classList.add('message');
-    // Check if the sender matches the current user (case-insensitive to be safe)
+    
+    // Check if the sender matches the current user
     if (sender.toLowerCase() === currentUserId.toLowerCase()) {
         div.classList.add('me');
     } else {
         div.classList.add('them');
     }
+    
     div.innerText = text;
     messagesDiv.appendChild(div);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
