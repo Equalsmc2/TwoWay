@@ -1,7 +1,6 @@
-/* --- Import Team Fonts --- */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Fira+Code&family=Orbitron:wght@700&family=Space+Mono&display=swap');
 
-/* --- The Dark Tabletop (Background) --- */
+/* --- The Dark Tabletop --- */
 body { 
     background: radial-gradient(circle at center, #1a1a24 0%, #000 100%);
     display: flex; 
@@ -13,77 +12,89 @@ body {
     overflow: hidden;
 }
 
-/* --- The Open Book (Main Container) --- */
-.container { 
-    position: relative;
-    width: 90vw;
-    max-width: 1200px;
-    height: 85vh;
-    display: flex;
-    flex-direction: column;
-    border-radius: 8px 25px 25px 8px; /* Curved outer pages, flat spine */
-    box-shadow: 0 40px 60px rgba(0,0,0,0.9), inset 0 0 20px rgba(0,0,0,0.8);
+/* =========================================
+   THE CLOSED TOME (Auth Screen)
+   ========================================= */
+.tome-cover {
+    width: 450px;
+    padding: 60px 40px;
+    background: linear-gradient(135deg, #050514 0%, #140d00 100%);
     border: 4px solid #111;
-    outline: 1px solid #333; /* Leather binding edge */
-    
-    /* SPLIT BACKGROUND: Azure Left (50%) | Amber Right (50%) */
-    background:
-        /* Azure Matrix Grid (Left) */
-        linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px),
-        /* Core Split */
-        linear-gradient(to right, #010105 0%, #050514 50%, #140d00 50%, #030200 100%);
-    background-size: 50px 50px, 50px 50px, 100% 100%;
+    outline: 2px solid #333; /* Leather binding edge */
+    box-shadow: 0 20px 50px rgba(0,0,0,1), inset 0 0 30px rgba(0,0,0,0.8);
+    border-radius: 5px 25px 25px 5px;
+    text-align: center;
+    z-index: 20;
 }
 
-/* --- The Book Spine (Center Crease) --- */
-.container::after {
-    content: "";
+.tome-cover h2 { font-family: 'Orbitron', sans-serif; color: #00ffff; text-shadow: 0 0 15px rgba(0, 136, 255, 0.6); margin: 0 0 10px 0; font-size: 2em;}
+.tome-cover p { font-family: 'Cinzel', serif; color: #ffbf00; margin: 0 0 40px 0; letter-spacing: 2px;}
+.tome-cover input { width: 100%; padding: 15px; margin-bottom: 20px; background: rgba(0,0,0,0.8); border: 1px solid #555; color: #fff; font-family: 'Space Mono', monospace; text-align: center; box-sizing: border-box; border-radius: 4px;}
+.tome-cover button { width: 100%; padding: 15px; background: rgba(255, 191, 0, 0.1); border: 1px solid #ffbf00; color: #ffbf00; cursor: pointer; font-family: 'Cinzel', serif; font-size: 1.1em; transition: 0.3s; border-radius: 4px; font-weight: bold;}
+.tome-cover button:hover { background: rgba(255, 191, 0, 0.3); box-shadow: 0 0 20px rgba(255, 191, 0, 0.5); color: #fff;}
+
+/* =========================================
+   THE OPEN BOOK (Chat Interface)
+   ========================================= */
+.book-spread { 
+    position: relative;
+    width: 95vw;
+    max-width: 1400px;
+    min-width: 900px; /* Forces book to stay wide */
+    height: 85vh;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px 30px 30px 10px; 
+    box-shadow: 0 30px 60px rgba(0,0,0,0.9), inset 0 0 20px rgba(0,0,0,0.8);
+    border: 3px solid #111;
+    overflow: hidden;
+    
+    /* Left Page (Azure) | Right Page (Amber) */
+    background:
+        linear-gradient(to right, #02020a 0%, #0a0a1a 100%) left / 50% 100% no-repeat,
+        linear-gradient(to right, #1a1200 0%, #050300 100%) right / 50% 100% no-repeat;
+}
+
+/* The Deep Center Crease */
+.book-spine {
     position: absolute;
-    top: 0; 
-    left: 50%;
-    width: 6px; 
+    top: 0; left: 50%;
+    width: 100px; 
     height: 100%;
-    background: #000;
-    box-shadow: 0 0 30px 15px rgba(0,0,0,0.9);
+    background: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.9) 50%, transparent 100%);
     transform: translateX(-50%);
-    pointer-events: none; /* Allows clicking through the shadow */
+    pointer-events: none;
     z-index: 5;
 }
 
-/* --- Login Screen (Closed Book Vibe) --- */
-#auth-container {
-    width: 400px;
-    height: auto;
-    padding: 50px;
-    margin: auto;
-    background: linear-gradient(135deg, rgba(1,1,5,0.9) 0%, rgba(20,13,0,0.9) 100%);
-    border: 2px solid #333;
-    box-shadow: 0 0 40px rgba(0,0,0,1);
-    z-index: 20;
-}
-#auth-container h2 { font-family: 'Orbitron', sans-serif; color: #00ffff; text-shadow: 0 0 10px rgba(0, 136, 255, 0.6); margin-bottom: 5px; }
-#auth-container p { font-family: 'Cinzel', serif; color: #ffbf00; margin-bottom: 30px; }
-#auth-container input { width: 100%; padding: 12px; margin-bottom: 20px; background: rgba(0,0,0,0.6); border: 1px solid #555; color: #fff; font-family: 'Space Mono', monospace; text-align: center; }
-#auth-container button { width: 100%; padding: 12px; background: transparent; border: 1px solid #777; color: #fff; cursor: pointer; font-family: 'Orbitron', sans-serif; transition: 0.3s; }
-#auth-container button:hover { border-color: #ffbf00; box-shadow: 0 0 15px rgba(255, 191, 0, 0.3); }
-
-/* --- Header Area --- */
-.chat-header { 
+/* --- Headers (Top of the Pages) --- */
+.book-header { 
     display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    padding: 20px 50px; 
-    font-size: 1.3em; 
-    z-index: 10;
+    width: 100%;
     border-bottom: 2px solid rgba(255,255,255,0.05);
+    z-index: 10;
+    background: rgba(0,0,0,0.4);
 }
-#display-name { flex: 1; text-align: left; color: #00ffff; font-family: 'Orbitron', sans-serif; text-shadow: 0 0 10px rgba(0, 136, 255, 0.6); letter-spacing: 2px; text-transform: uppercase; }
-.chat-header span:nth-child(2) { color: #444; font-size: 0.8em; }
-#partner-name { flex: 1; text-align: right; color: #ffbf00; font-family: 'Cinzel', serif; text-shadow: 0 0 10px rgba(255, 191, 0, 0.6); letter-spacing: 2px; text-transform: uppercase; }
+
+.header-page {
+    flex: 1; /* Each takes exactly 50% */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+}
+
+/* Azure Header Styling */
+.azure-header .team-label { color: #00ffff; font-family: 'Orbitron', sans-serif; font-size: 0.9em; opacity: 0.7;}
+.azure-header .char-name { color: #00ffff; font-family: 'Fira Code', monospace; font-size: 1.3em; font-weight: bold; text-shadow: 0 0 10px rgba(0, 136, 255, 0.6); text-transform: uppercase;}
+
+/* Amber Header Styling */
+.amber-header .team-label { color: #ffbf00; font-family: 'Cinzel', serif; font-size: 0.9em; opacity: 0.7;}
+.amber-header .char-name { color: #ffbf00; font-family: 'Space Mono', monospace; font-size: 1.3em; font-weight: bold; text-shadow: 0 0 10px rgba(255, 191, 0, 0.6); text-transform: uppercase;}
 
 /* --- The Pages (Chat Window) --- */
-#messages { 
+.pages-container { 
     flex: 1; 
     overflow-y: auto; 
     padding: 40px; 
@@ -91,54 +102,53 @@ body {
     flex-direction: column; 
     z-index: 10;
 }
-#messages::-webkit-scrollbar { width: 6px; }
-#messages::-webkit-scrollbar-track { background: transparent; }
-#messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
+.pages-container::-webkit-scrollbar { width: 8px; }
+.pages-container::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+.pages-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px;}
 
+/* Base Message Box */
 .message { 
     margin-bottom: 25px; 
-    padding: 15px 20px; 
-    max-width: 42%; /* Restricts messages to stay STRICTLY on their side of the book */
+    padding: 15px 25px; 
+    width: 42%; /* Prevents text from crossing the spine */
     word-wrap: break-word;
     line-height: 1.6;
-    position: relative;
 }
 
-/* --- THE LEFT PAGE (Team Azure / Incoming Messages) --- */
+/* THE LEFT PAGE (Team Azure - Incoming) */
 .message.them { 
     align-self: flex-start; 
-    background: rgba(0, 136, 255, 0.1); 
+    background: rgba(0, 136, 255, 0.08); 
     border-left: 3px solid #00ffff; 
     color: #e0f7ff; 
     font-family: 'Fira Code', monospace; 
-    font-size: 0.95rem;
-    box-shadow: inset 0 0 20px rgba(0, 136, 255, 0.1);
+    font-size: 1rem;
     border-radius: 0 15px 15px 0;
+    box-shadow: inset 0 0 20px rgba(0, 136, 255, 0.1);
 }
 
-/* --- THE RIGHT PAGE (Team Amber / Outgoing Messages) --- */
+/* THE RIGHT PAGE (Team Amber - Outgoing) */
 .message.me { 
     align-self: flex-end; 
     background: rgba(255, 191, 0, 0.05); 
     border-right: 3px solid #ffbf00; 
     color: #fdf5e6; 
     font-family: 'Space Mono', monospace; 
-    font-size: 0.95rem;
-    box-shadow: inset 0 0 20px rgba(255, 191, 0, 0.1);
+    font-size: 1rem;
     border-radius: 15px 0 0 15px;
     text-align: right;
+    box-shadow: inset 0 0 20px rgba(255, 191, 0, 0.1);
 }
 
 /* --- Bottom Input Area --- */
 .input-area { 
     display: flex; 
-    padding: 25px 50px; 
+    padding: 25px 40px; 
     gap: 20px; 
     z-index: 10;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.6);
     border-top: 1px solid rgba(255,255,255,0.05);
 }
-
 .input-area input { 
     flex: 1; 
     padding: 15px 20px; 
@@ -149,27 +159,18 @@ body {
     font-family: 'Space Mono', monospace; 
     font-size: 1rem;
     outline: none;
-    transition: all 0.3s ease;
+    transition: 0.3s;
 }
-.input-area input:focus { 
-    border-color: #ffbf00; 
-    box-shadow: inset 0 0 15px rgba(255, 191, 0, 0.2); 
-}
-
+.input-area input:focus { border-color: #ffbf00; box-shadow: inset 0 0 15px rgba(255, 191, 0, 0.2); }
 .input-area button { 
-    padding: 0 35px; 
+    padding: 0 40px; 
     background: transparent; 
     color: #fff; 
-    border: 1px solid #666; 
+    border: 1px solid #777; 
     border-radius: 8px; 
     cursor: pointer; 
     font-family: 'Orbitron', sans-serif; 
-    font-weight: bold; 
-    letter-spacing: 1px;
-    transition: all 0.3s ease; 
+    font-size: 1.1em;
+    transition: 0.3s;
 }
-.input-area button:hover { 
-    background: rgba(0, 255, 255, 0.1); 
-    border-color: #00ffff;
-    text-shadow: 0 0 10px #00ffff;
-}
+.input-area button:hover { border-color: #ffbf00; color: #ffbf00; text-shadow: 0 0 10px #ffbf00; }
