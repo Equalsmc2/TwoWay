@@ -18,20 +18,23 @@ const db = getDatabase(app);
 
 // --- FACTION & LORE CONFIGURATION ---
 // Define which characters belong to which reality (use all lowercase)
-const teamAzure = ["thorin", "grog", "caleb"]; 
-const teamAmber = ["Old seeker", "Prince seeker", "Parted seeker"];
+const teamAzure = ["AzureSeeker","thorin", "grog", "caleb"]; 
+const teamAmber = ["AmberSeeker","OldSeeker", "PrinceSeeker", "PartedSeeker"];
 
 // Define the 1-on-1 connections across the rift
 const characterPairs = {
-    
+
+    "AmberSeeker": "AzureSeeker",
+    "AzureSeeker": "AmberSeeker",
+  
     "Old seeker": "thorin",
-    "thorin": "Old seeker",
+    "thorin": "OldSeeker",
   
     "Prince seeker": "grog",
-    "grog": "Prince seeker",
+    "grog": "PrinceSeeker",
   
     "Parted seeker": "caleb",
-    "caleb": "Parted seeker"
+    "caleb": "PartedSeeker"
 };
 
 // --- UI ELEMENTS ---
