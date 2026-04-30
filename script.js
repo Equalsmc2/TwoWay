@@ -19,8 +19,8 @@ const db = getDatabase(app);
 // --- FACTION & LORE CONFIGURATION ---
 // Define which characters belong to which reality (use all lowercase)
 // Example: Adding "new_seeker" to Azure and "shadow_seeker" to Amber
-const teamAzure = ["azure_seeker","weaveshaper_seeker", "fabled_seeker", "caleb", "new_seeker"]; 
-const teamAmber = ["amber_seeker","old_seeker", "prince_seeker", "parted_seeker", "shadow_seeker"];
+const teamAzure = ["azure_seeker","weaveshaper_seeker", "fabled_seeker", "typed_seeker", "faded_seeker"]; 
+const teamAmber = ["amber_seeker","old_seeker", "prince_seeker", "written_seeker", "dual_seeker"];
 
 // Define the 1-on-1 connections across the rift
 const characterPairs = {
@@ -33,13 +33,11 @@ const characterPairs = {
     "prince_seeker": "fabled_seeker",
     "fabled_seeker": "prince_seeker",
   
-    "parted_seeker": "caleb",
-    "caleb": "parted_seeker",
-
-    // --- ADD YOUR NEW PAIRS HERE ---
+    "written_seeker": "typed_seeker",
+    "typed_seeker": "written_seeker",
     
-    //"new_seeker": "shadow_seeker",
-    //"shadow_seeker": "new_seeker" 
+    "dual_seeker": "faded_seeker",
+    "faded_seeker": "dual_seeker" 
 
     //"new_seeker": "shadow_seeker",
     //"shadow_seeker": "new_seeker" 
