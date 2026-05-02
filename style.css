@@ -1,19 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Fira+Code:wght@400;600&family=Orbitron:wght@700&family=Space+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Fira+Code:wght@400;600&family=Orbitron:wght@700&family=Space+Mono&display=swap&family=Cinzel:wght@600');
 
 :root {
     --azure-main: #00ffff;
-    --azure-glow: rgba(0, 255, 255, 0.4);
-    --azure-bg: rgba(0, 255, 255, 0.05);
+    --azure-glow: rgba(0, 255, 255, 0.6);
+    --azure-bg: rgba(0, 255, 255, 0.08);
+    --azure-terminal: #021a1a;
     
     --amber-main: #ffbf00;
-    --amber-glow: rgba(255, 191, 0, 0.4);
-    --amber-bg: rgba(255, 191, 0, 0.05);
+    --amber-glow: rgba(255, 191, 0, 0.5);
+    --amber-bg: rgba(255, 191, 0, 0.08);
+    --amber-parchment: #1a1302;
     
-    --glass-bg: rgba(5, 5, 5, 0.65);
+    --glass-bg: rgba(5, 5, 5, 0.75);
 }
 
 body { 
-    background: #030303;
+    background: #020202;
+    /* Subtle slow-moving void background */
+    background-image: radial-gradient(circle at 50% 50%, #0a0a0a 0%, #000000 100%);
     display: flex; justify-content: center; align-items: center;
     height: 100vh; margin: 0; color: #fff; overflow: hidden;
     font-family: 'Space Mono', monospace;
@@ -22,6 +26,12 @@ body {
 /* =========================================
    THE OPEN RIFT (Chat Interface)
    ========================================= */
+@keyframes riftOpen {
+    0% { transform: scaleY(0.01) scaleX(0); opacity: 0; filter: blur(20px); }
+    50% { transform: scaleY(0.01) scaleX(1); opacity: 1; filter: blur(5px); }
+    100% { transform: scaleY(1) scaleX(1); opacity: 1; filter: blur(0); }
+}
+
 .book-spread { 
     position: relative; 
     width: 95vw; max-width: 1400px; min-width: 900px; 
@@ -29,56 +39,60 @@ body {
     display: flex; flex-direction: column;
     
     /* Overall Container: Geometric left, Round right */
-    border-radius: 0 60px 60px 0; 
-    box-shadow: 0 20px 60px rgba(0,0,0,0.9), 
-                -5px 0 30px rgba(0, 255, 255, 0.05), 
-                5px 0 30px rgba(255, 191, 0, 0.05);
+    border-radius: 0 80px 80px 0; 
+    box-shadow: 0 30px 80px rgba(0,0,0,0.9), 
+                -10px 0 50px rgba(0, 255, 255, 0.1), 
+                10px 0 50px rgba(255, 191, 0, 0.1);
     border: 1px solid #1a1a1a; 
     overflow: hidden;
     
-    background: linear-gradient(to right, #05080c 50%, #0a0703 50%);
+    background: linear-gradient(to right, #03060a 50%, #0a0602 50%);
+    animation: riftOpen 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* The Subtle Tear Between Dimensions */
+/* The Subtle Tear Between Dimensions - Now animated */
+@keyframes energyPulse {
+    0% { opacity: 0.5; box-shadow: -2px 0 10px var(--azure-glow), 2px 0 10px var(--amber-glow); }
+    50% { opacity: 1; box-shadow: -5px 0 25px var(--azure-glow), 5px 0 25px var(--amber-glow); }
+    100% { opacity: 0.5; box-shadow: -2px 0 10px var(--azure-glow), 2px 0 10px var(--amber-glow); }
+}
+
 .dimensional-spine {
     position: absolute; top: 0; left: 50%; width: 2px; height: 100%;
-    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.2), transparent);
-    box-shadow: -3px 0 15px var(--azure-glow), 3px 0 15px var(--amber-glow);
+    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.6), transparent);
     transform: translateX(-50%); pointer-events: none; z-index: 5;
+    animation: energyPulse 3s infinite ease-in-out;
 }
 
 /* --- Headers (Glassmorphism) --- */
 .book-header { 
     display: flex; width: 100%; z-index: 10; 
     background: var(--glass-bg); 
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 .header-page { 
     flex: 1; display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; 
 }
 
-/* Azure Header - Geometric */
+/* Azure Header - Geometric & Digital */
 .azure-header { 
     border-bottom: 2px solid var(--azure-main); 
-    box-shadow: inset 0 -5px 15px -5px var(--azure-bg);
+    box-shadow: inset 0 -10px 20px -10px var(--azure-bg);
+    background: linear-gradient(180deg, transparent, rgba(0, 255, 255, 0.03));
 }
-.azure-header .team-label { color: var(--azure-main); font-family: 'Orbitron', sans-serif; font-size: 0.7em; letter-spacing: 3px; }
-.azure-header .char-name { color: #fff; font-family: 'Fira Code', monospace; font-size: 1.2em; font-weight: bold; text-transform: none; text-shadow: 0 0 10px var(--azure-glow);}
+.azure-header .team-label { color: var(--azure-main); font-family: 'Orbitron', sans-serif; font-size: 0.7em; letter-spacing: 4px; text-shadow: 0 0 5px var(--azure-main); }
+.azure-header .char-name { color: #fff; font-family: 'Fira Code', monospace; font-size: 1.2em; font-weight: bold; text-transform: uppercase; text-shadow: 0 0 15px var(--azure-glow), 0 0 5px var(--azure-main);}
 
-/* Amber Header - Round/Classic */
-.amber-header .char-name { 
-    color: #fff; 
-    font-family: 'Cormorant Garamond', serif; /* CHANGED HERE */
-    font-size: 1.4em; 
-    font-weight: bold; 
-    text-transform: none; 
-    text-shadow: 0 0 10px var(--amber-glow);
+/* Amber Header - Round, Warm & Classic */
+.amber-header {
+    border-bottom: 2px solid var(--amber-main); 
+    box-shadow: inset 0 -10px 20px -10px var(--amber-bg);
+    background: linear-gradient(180deg, transparent, rgba(255, 191, 0, 0.03));
 }
-
 .amber-header .team-label { color: var(--amber-main); font-family: 'Space Mono', monospace; font-size: 0.7em; letter-spacing: 3px; }
-.amber-header .char-name { color: #fff; font-family: 'Cinzel', serif; font-size: 1.4em; font-weight: bold; text-transform: none; text-shadow: 0 0 10px var(--amber-glow);}
+.amber-header .char-name { color: #fff; font-family: 'Cinzel', serif; font-size: 1.5em; font-weight: bold; text-transform: capitalize; text-shadow: 0 0 15px var(--amber-glow), 0 0 5px var(--amber-main);}
 
 /* --- The Message Void --- */
 .pages-container { 
@@ -87,89 +101,146 @@ body {
     scroll-behavior: smooth;
 }
 
-/* Custom Scrollbar */
-.pages-container::-webkit-scrollbar { width: 8px; }
-.pages-container::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
-.pages-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-.pages-container::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
-
-/* Message Animations */
-@keyframes manifestMessage {
-    0% { opacity: 0; transform: translateY(15px); }
-    100% { opacity: 1; transform: translateY(0); }
-}
+.pages-container::-webkit-scrollbar { width: 6px; }
+.pages-container::-webkit-scrollbar-track { background: transparent; }
+.pages-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 0; }
+.pages-container::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
 
 .message { 
-    margin-bottom: 24px; padding: 18px 25px; width: 45%; max-width: 500px;
-    word-wrap: break-word; line-height: 1.6; position: relative; 
-    animation: manifestMessage 0.4s ease-out forwards;
+    margin-bottom: 30px; padding: 20px 28px; width: 45%; max-width: 550px;
+    word-wrap: break-word; line-height: 1.7; position: relative; 
 }
 
-/* THE LEFT PAGE (Team Azure) - STRICTLY GEOMETRIC */
+/* =========================================
+   TEAM AZURE (Digital, Glitch, Geometric)
+   ========================================= */
+@keyframes digitalGlitchIn {
+    0% { opacity: 0; clip-path: polygon(0 10%, 100% 10%, 100% 20%, 0 20%); transform: translateX(-20px); }
+    20% { opacity: 0.8; clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%); transform: translateX(10px); }
+    40% { opacity: 0.5; clip-path: polygon(0 30%, 100% 30%, 100% 50%, 0 50%); transform: translateX(-5px); }
+    60% { opacity: 1; clip-path: polygon(0 0%, 100% 0%, 100% 100%, 0 100%); transform: translateX(5px); }
+    100% { opacity: 1; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%); transform: translateX(0); }
+}
+
+@keyframes holographicScan {
+    0% { top: 0; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+}
+
 .message.azure-msg { 
     align-self: flex-start; 
-    background: var(--azure-bg);
-    border: 1px solid rgba(0, 255, 255, 0.2);
+    background: var(--azure-terminal);
+    border: 1px solid rgba(0, 255, 255, 0.3);
     border-left: 4px solid var(--azure-main); 
-    color: #e0f7ff; 
+    color: #bbf0ff; 
     font-family: 'Fira Code', monospace; 
     font-size: 0.95rem;
     border-radius: 0; /* Pure cubic */
-    /* Futuristic cut-corner effect */
-    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.5);
+    /* Aggressive Futuristic cut-corner effect */
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+    box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.8), inset 0 0 15px var(--azure-bg);
+    animation: digitalGlitchIn 0.5s ease-out forwards;
+    text-shadow: 0 0 2px rgba(0, 255, 255, 0.3);
 }
 
-/* THE RIGHT PAGE (Team Amber) - PERFECTLY ROUND */
+/* The holographic scanning line */
+.message.azure-msg::after {
+    content: ''; position: absolute; left: 0; width: 100%; height: 2px;
+    background: var(--azure-main);
+    box-shadow: 0 0 10px var(--azure-main);
+    animation: holographicScan 3s linear infinite;
+    pointer-events: none;
+}
+
+
+/* =========================================
+   TEAM AMBER (Organic, Ink, Breathing)
+   ========================================= */
+@keyframes inkReveal {
+    0% { opacity: 0; filter: blur(15px); transform: translateY(10px) scale(0.98); color: transparent; }
+    50% { filter: blur(5px); color: rgba(253, 245, 230, 0.5); }
+    100% { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); color: #fdf5e6; }
+}
+
+@keyframes manuscriptBreath {
+    0% { box-shadow: -5px 5px 25px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(255, 191, 0, 0.02); border-color: rgba(255, 191, 0, 0.1); }
+    100% { box-shadow: -5px 5px 35px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(255, 191, 0, 0.1); border-color: rgba(255, 191, 0, 0.4); }
+}
+
 .message.amber-msg { 
     align-self: flex-end; 
-    background: var(--amber-bg);
+    background: var(--amber-parchment);
     border: 1px solid rgba(255, 191, 0, 0.2);
     color: #fdf5e6; 
-    font-family: 'Cormorant Garamond', serif; /* CHANGED HERE */
-    font-size: 1.15rem; /* Bumped up slightly for readability */
+    font-family: 'Cormorant Garamond', serif; 
+    font-size: 1.25rem; 
     
-    border-radius: 25px 25px 5px 25px; 
-    box-shadow: -5px 5px 20px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(255, 191, 0, 0.05);
+    /* Extremely fluid, rounded corners */
+    border-radius: 40px 40px 5px 40px; 
     text-align: right;
+    
+    animation: inkReveal 1s ease-out forwards, manuscriptBreath 4s ease-in-out infinite alternate;
 }
+
+/* Subtle ink bleed text shadow */
+.message.amber-msg p, .message.amber-msg span {
+    text-shadow: 0px 0px 1px rgba(255, 191, 0, 0.3);
+}
+
 
 /* --- The Dimensional Bridge (Bottom Input Area) --- */
 .input-area { 
-    display: flex; flex-direction: row; padding: 25px 40px; gap: 15px; z-index: 10;
+    display: flex; flex-direction: row; padding: 25px 40px; gap: 20px; z-index: 10;
     background: var(--glass-bg); 
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     border-top: 1px solid rgba(255,255,255,0.05); align-items: center;
 }
 
-/* Bridging Shape: Sharp left (Azure), Round right (Amber) */
+/* Input bridging the gap */
 .input-area input { 
-    flex: 1; padding: 18px 25px; 
-    background: rgba(0,0,0,0.5);
-    border: 1px solid #333; 
-    border-left: 3px solid var(--azure-main); 
-    border-right: 3px solid var(--amber-main); 
-    border-radius: 0 30px 30px 0; /* Left sharp, Right extremely round */
+    flex: 1; padding: 20px 30px; 
+    background: rgba(0,0,0,0.6);
+    border: 1px solid #222; 
+    border-left: 4px solid var(--azure-main); 
+    border-right: 4px solid var(--amber-main); 
+    border-radius: 0 50px 50px 0; /* Left razor sharp, Right completely pill-shaped */
     color: #fff; font-family: 'Space Mono', monospace; font-size: 1rem;
-    outline: none; transition: all 0.3s ease;
-}
-.input-area input:focus { 
-    background: rgba(20,20,20,0.8); 
-    border-color: #555; 
-    box-shadow: inset 0 0 15px rgba(255,255,255,0.02);
+    outline: none; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+.input-area input:focus { 
+    background: #050505; 
+    border-color: #444; 
+    box-shadow: inset 10px 0 20px -10px var(--azure-bg), inset -10px 0 20px -10px var(--amber-bg);
+    transform: scale(1.01);
+}
+
+/* Projection Button */
 .input-area button { 
-    padding: 18px 35px; 
-    background: transparent; color: #ccc; 
-    border: 1px solid #333; 
-    border-radius: 0 30px 30px 0; 
-    cursor: pointer; font-family: 'Orbitron', sans-serif; font-size: 1rem; letter-spacing: 2px;
+    padding: 20px 40px; 
+    background: transparent; color: #fff; 
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+    border-radius: 0 50px 50px 0; 
+    cursor: pointer; font-family: 'Orbitron', sans-serif; font-size: 1rem; letter-spacing: 3px;
+    position: relative; overflow: hidden;
     transition: all 0.3s ease;
 }
+
+.input-area button::before {
+    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
 .input-area button:hover { 
-    background: rgba(255, 255, 255, 0.1);
-    border-color: #666; color: #fff; 
-    box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    border-color: #fff; 
+    box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    text-shadow: 0 0 8px #fff;
+}
+
+.input-area button:hover::before {
+    left: 100%;
 }
