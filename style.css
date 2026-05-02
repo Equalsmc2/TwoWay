@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Fira+Code:wght@400;600&family=Orbitron:wght@700&family=Space+Mono&display=swap&family=Cinzel:wght@600');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Orbitron:wght@700&family=Space+Mono&family=Cinzel:wght@600&family=VT323&display=swap');
 
 :root {
     --azure-main: #00ffff;
@@ -83,7 +83,14 @@ body {
     background: linear-gradient(180deg, transparent, rgba(0, 255, 255, 0.03));
 }
 .azure-header .team-label { color: var(--azure-main); font-family: 'Orbitron', sans-serif; font-size: 0.7em; letter-spacing: 4px; text-shadow: 0 0 5px var(--azure-main); }
-.azure-header .char-name { color: #fff; font-family: 'Fira Code', monospace; font-size: 1.2em; font-weight: bold; text-transform: uppercase; text-shadow: 0 0 15px var(--azure-glow), 0 0 5px var(--azure-main);}
+.azure-header .char-name { 
+    color: #fff; 
+    font-family: 'VT323', monospace; /* Updated to Pixel Font */
+    font-size: 2em; /* Bumped size for pixel legibility */
+    font-weight: bold; 
+    text-transform: uppercase; 
+    text-shadow: 0 0 15px var(--azure-glow), 0 0 5px var(--azure-main);
+}
 
 /* Amber Header - Round, Warm & Classic */
 .amber-header {
@@ -135,14 +142,15 @@ body {
     border: 1px solid rgba(0, 255, 255, 0.3);
     border-left: 4px solid var(--azure-main); 
     color: #bbf0ff; 
-    font-family: 'Fira Code', monospace; 
-    font-size: 0.95rem;
+    font-family: 'VT323', monospace; /* Updated to Pixel Font */
+    font-size: 1.4rem; /* Bumped size for pixel legibility */
+    letter-spacing: 1px;
     border-radius: 0; /* Pure cubic */
     /* Aggressive Futuristic cut-corner effect */
     clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
     box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.8), inset 0 0 15px var(--azure-bg);
     animation: digitalGlitchIn 0.5s ease-out forwards;
-    text-shadow: 0 0 2px rgba(0, 255, 255, 0.3);
+    text-shadow: 0 0 2px rgba(0, 255, 255, 0.4);
 }
 
 /* The holographic scanning line */
@@ -156,17 +164,25 @@ body {
 
 
 /* =========================================
-   TEAM AMBER (Organic, Ink, Breathing)
+   TEAM AMBER (Organic, Ink, Breathing & Waving)
    ========================================= */
 @keyframes inkReveal {
-    0% { opacity: 0; filter: blur(15px); transform: translateY(10px) scale(0.98); color: transparent; }
+    0% { opacity: 0; filter: blur(15px); color: transparent; }
     50% { filter: blur(5px); color: rgba(253, 245, 230, 0.5); }
-    100% { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); color: #fdf5e6; }
+    100% { opacity: 1; filter: blur(0); color: #fdf5e6; }
 }
 
 @keyframes manuscriptBreath {
     0% { box-shadow: -5px 5px 25px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(255, 191, 0, 0.02); border-color: rgba(255, 191, 0, 0.1); }
     100% { box-shadow: -5px 5px 35px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(255, 191, 0, 0.1); border-color: rgba(255, 191, 0, 0.4); }
+}
+
+/* New Wave Animation */
+@keyframes floatingWave {
+    0%   { transform: translateY(0px) rotate(0deg); }
+    25%  { transform: translateY(-5px) rotate(0.5deg); }
+    75%  { transform: translateY(5px) rotate(-0.5deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
 }
 
 .message.amber-msg { 
@@ -181,7 +197,11 @@ body {
     border-radius: 40px 40px 5px 40px; 
     text-align: right;
     
-    animation: inkReveal 1s ease-out forwards, manuscriptBreath 4s ease-in-out infinite alternate;
+    /* Chained Animations: Fade in, breathe colors, and continuously wave up and down */
+    animation: 
+        inkReveal 1s ease-out forwards, 
+        manuscriptBreath 4s ease-in-out infinite alternate,
+        floatingWave 6s ease-in-out infinite; 
 }
 
 /* Subtle ink bleed text shadow */
