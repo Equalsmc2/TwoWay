@@ -17,129 +17,106 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 // --- FACTION & LORE CONFIGURATION ---
-// Define which characters belong to which reality (use all lowercase)
-// Example: Adding "new_seeker" to Azure and "shadow_seeker" to Amber
-const teamAzure = ["azure_seeker","weaveshaper_seeker", "fabled_seeker", "typed_seeker", "faded_seeker", "mneme_seeker"]; 
-const teamAmber = ["amber_seeker","old_seeker", "prince_seeker", "written_seeker", "dual_seeker", "mirror_seeker"];
+// Using Sets for faster O(1) lookups instead of Arrays
+const teamAzure = new Set(["azure_seeker", "weaveshaper_seeker", "fabled_seeker", "typed_seeker", "faded_seeker", "mneme_seeker"]); 
+const teamAmber = new Set(["amber_seeker", "old_seeker", "prince_seeker", "written_seeker", "dual_seeker", "mirror_seeker"]);
 
-// Define the 1-on-1 connections across the rift
 const characterPairs = {
-    "amber_seeker": "azure_seeker",
-    "azure_seeker": "amber_seeker",
-  
-    "old_seeker": "weaveshaper_seeker",
-    "weaveshaper_seeker": "old_seeker",
-  
-    "prince_seeker": "fabled_seeker",
-    "fabled_seeker": "prince_seeker",
-  
-    "written_seeker": "typed_seeker",
-    "typed_seeker": "written_seeker",
-    
-    "dual_seeker": "faded_seeker",
-    "faded_seeker": "dual_seeker",
-
-    "mirror_seeker": "mneme_seeker",
-    "mneme_seeker": "mirror_seeker" 
+    "amber_seeker": "azure_seeker", "azure_seeker": "amber_seeker",
+    "old_seeker": "weaveshaper_seeker", "weaveshaper_seeker": "old_seeker",
+    "prince_seeker": "fabled_seeker", "fabled_seeker": "prince_seeker",
+    "written_seeker": "typed_seeker", "typed_seeker": "written_seeker",
+    "dual_seeker": "faded_seeker", "faded_seeker": "dual_seeker",
+    "mirror_seeker": "mneme_seeker", "mneme_seeker": "mirror_seeker" 
 };
 
-// --- UI ELEMENTS ---
-const loginBtn = document.getElementById('login-btn');
-const sendBtn = document.getElementById('send-btn');
-const userIdInput = document.getElementById('user-id');
-const messageInput = document.getElementById('message-input');
-const messagesDiv = document.getElementById('messages');
+// --- UI ELEMENTS CACHE ---
+const elements = {
+    loginBtn: document.getElementById('login-btn'),
+    sendBtn: document.getElementById('send-btn'),
+    userIdInput: document.getElementById('user-id'),
+    messageInput: document.getElementById('message-input'),
+    messagesDiv: document.getElementById('messages'),
+    authContainer: document.getElementById('auth-container'),
+    chatContainer: document.getElementById('chat-container'),
+    azureNameDisplay: document.querySelector('.azure-header .char-name'),
+    amberNameDisplay: document.querySelector('.amber-header .char-name')
+};
 
-let currentUserId = "";
-let partnerId = "";
-let roomId = "";
+// --- SESSION STATE ---
+const currentSession = {
+    userId: "",
+    partnerId: "",
+    roomId: ""
+};
 
-// --- LOGIN LOGIC ---
-loginBtn.onclick = () => {
-    const inputName = userIdInput.value.trim().toLowerCase();
+// --- UTILITY FUNCTIONS ---
+const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+const getFactionClass = (userId) => teamAzure.has(userId) ? 'azure-msg' : 'amber-msg';
+
+// --- CORE LOGIC ---
+const initChat = () => {
+    const inputName = elements.userIdInput.value.trim().toLowerCase();
 
     if (!inputName) return alert("System Error: Identity required to puncture reality.");
     if (!characterPairs[inputName]) return alert("System Error: Character signature not found in the manifest.");
 
-    // Assign identities
-    currentUserId = inputName; 
-    partnerId = characterPairs[inputName];
-    
-    // Create unique Room ID by sorting alphabetically so both players share the same database path
-    roomId = [currentUserId, partnerId].sort().join("_");
+    // Assign identities and room
+    currentSession.userId = inputName; 
+    currentSession.partnerId = characterPairs[inputName];
+    currentSession.roomId = [inputName, currentSession.partnerId].sort().join("_");
 
-    // UI Toggle: Hide login, show the rift
-    document.getElementById('auth-container').style.display = 'none';
-    document.getElementById('chat-container').style.display = 'flex';
+    // UI Toggle
+    elements.authContainer.style.display = 'none';
+    elements.chatContainer.style.display = 'flex';
 
-    // Format names for the display headers (Capitalizes the first letter)
-    const displayUser = currentUserId.charAt(0).toUpperCase() + currentUserId.slice(1);
-    const displayPartner = partnerId.charAt(0).toUpperCase() + partnerId.slice(1);
-
-    // Lock the names to the correct dimension in the headers!
-    const azureNameDisplay = document.querySelector('.azure-header .char-name');
-    const amberNameDisplay = document.querySelector('.amber-header .char-name');
-
-    if (teamAzure.includes(currentUserId)) {
-        azureNameDisplay.innerText = displayUser;
-        amberNameDisplay.innerText = displayPartner;
-    } else {
-        azureNameDisplay.innerText = displayPartner;
-        amberNameDisplay.innerText = displayUser;
-    }
+    // Set Headers dynamically based on faction
+    const isAzure = teamAzure.has(inputName);
+    elements.azureNameDisplay.innerText = capitalize(isAzure ? inputName : currentSession.partnerId);
+    elements.amberNameDisplay.innerText = capitalize(isAzure ? currentSession.partnerId : inputName);
 
     loadMessages();
 };
 
-// --- MESSAGE RENDERING LOGIC ---
-function loadMessages() {
-    const chatRef = ref(db, `chats/${roomId}`);
+const loadMessages = () => {
+    const chatRef = ref(db, `chats/${currentSession.roomId}`);
     onChildAdded(chatRef, (snapshot) => {
-        const data = snapshot.val();
-        displayMessage(data.sender, data.text);
+        const { sender, text } = snapshot.val();
+        displayMessage(sender, text);
     });
-}
+};
 
-function displayMessage(sender, text) {
+const displayMessage = (sender, text) => {
     const div = document.createElement('div');
-    div.classList.add('message');
     
-    const lowerSender = sender.toLowerCase();
-
-    // Route the message styles based entirely on FACTION
-    if (teamAzure.includes(lowerSender)) {
-        div.classList.add('azure-msg');
-    } else if (teamAmber.includes(lowerSender)) {
-        div.classList.add('amber-msg');
-    } else {
-        div.classList.add('amber-msg'); // Fallback failsafe
-    }
-    
+    // Apply general message class and faction-specific styling
+    div.classList.add('message', getFactionClass(sender.toLowerCase()));
     div.innerText = text;
-    messagesDiv.appendChild(div);
     
-    // Auto-scroll to bottom as new messages manifest
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-}
+    elements.messagesDiv.appendChild(div);
+    elements.messagesDiv.scrollTop = elements.messagesDiv.scrollHeight;
+};
 
-// --- SENDING LOGIC ---
-sendBtn.onclick = () => {
-    const text = messageInput.value.trim();
-    if (!text) return; // Prevent sending empty voids
+const sendMessage = () => {
+    const text = elements.messageInput.value.trim();
+    if (!text) return; 
 
-    push(ref(db, `chats/${roomId}`), {
-        sender: currentUserId,
+    push(ref(db, `chats/${currentSession.roomId}`), {
+        sender: currentSession.userId,
         text: text,
         timestamp: serverTimestamp()
     });
 
-    messageInput.value = ""; // Clear input after projecting
+    elements.messageInput.value = ""; 
 };
 
-// Allow pressing "Enter" to transmit
-messageInput.addEventListener("keypress", function(event) {
+// --- EVENT LISTENERS ---
+elements.loginBtn.addEventListener('click', initChat);
+elements.sendBtn.addEventListener('click', sendMessage);
+
+elements.messageInput.addEventListener("keypress", (event) => {
   if (event.key === "Enter") {
     event.preventDefault();
-    sendBtn.click();
+    sendMessage();
   }
 });
