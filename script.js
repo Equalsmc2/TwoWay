@@ -37,7 +37,7 @@ const characterPairs = {
     "typed_seeker": "written_seeker",
     
     "dual_seeker": "faded_seeker",
-    "faded_seeker": "dual_seeker" 
+    "faded_seeker": "dual_seeker",
 
     "mirror_seeker": "mneme_seeker",
     "mneme_seeker": "mirror_seeker" 
