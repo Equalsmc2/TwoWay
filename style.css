@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Fira+Code:wght@400;600&family=Orbitron:wght@700&family=Space+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Fira+Code:wght@400;600&family=Orbitron:wght@700&family=Space+Mono&display=swap');
 
 :root {
     --azure-main: #00ffff;
@@ -68,10 +68,15 @@ body {
 .azure-header .char-name { color: #fff; font-family: 'Fira Code', monospace; font-size: 1.2em; font-weight: bold; text-transform: none; text-shadow: 0 0 10px var(--azure-glow);}
 
 /* Amber Header - Round/Classic */
-.amber-header { 
-    border-bottom: 2px solid var(--amber-main); 
-    box-shadow: inset 0 -5px 15px -5px var(--amber-bg);
+.amber-header .char-name { 
+    color: #fff; 
+    font-family: 'Cormorant Garamond', serif; /* CHANGED HERE */
+    font-size: 1.4em; 
+    font-weight: bold; 
+    text-transform: none; 
+    text-shadow: 0 0 10px var(--amber-glow);
 }
+
 .amber-header .team-label { color: var(--amber-main); font-family: 'Space Mono', monospace; font-size: 0.7em; letter-spacing: 3px; }
 .amber-header .char-name { color: #fff; font-family: 'Cinzel', serif; font-size: 1.4em; font-weight: bold; text-transform: none; text-shadow: 0 0 10px var(--amber-glow);}
 
@@ -121,10 +126,9 @@ body {
     background: var(--amber-bg);
     border: 1px solid rgba(255, 191, 0, 0.2);
     color: #fdf5e6; 
-    font-family: 'Cinzel', serif; 
-    font-size: 1.05rem;
+    font-family: 'Cormorant Garamond', serif; /* CHANGED HERE */
+    font-size: 1.15rem; /* Bumped up slightly for readability */
     
-    /* Highly rounded chat bubble style */
     border-radius: 25px 25px 5px 25px; 
     box-shadow: -5px 5px 20px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(255, 191, 0, 0.05);
     text-align: right;
