@@ -20,7 +20,7 @@ const db = getDatabase(app);
 // Define which characters belong to which reality (use all lowercase)
 // Example: Adding "new_seeker" to Azure and "shadow_seeker" to Amber
 const teamAzure = ["azure_seeker","weaveshaper_seeker", "fabled_seeker", "typed_seeker", "faded_seeker", "mneme_seeker"]; 
-const teamAmber = ["amber_seeker","old_seeker", "prince_seeker", "written_seeker", "dual_seeker", "mirror_seeker];
+const teamAmber = ["amber_seeker","old_seeker", "prince_seeker", "written_seeker", "dual_seeker", "mirror_seeker"];
 
 // Define the 1-on-1 connections across the rift
 const characterPairs = {
